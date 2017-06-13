@@ -1,45 +1,321 @@
 package com.anjia.tumblr;
 
+import static org.junit.Assert.assertEquals;
 import static org.mockito.ArgumentMatchers.anyMap;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.withSettings;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.junit.Before;
 import org.junit.Test;
 
 import com.anjia.tumblr.responses.ResponseWrapper;
+import com.anjia.tumblr.types.QuotePost;
 
 /**
- * <b>描　　述</b>: TODO<br>
- * <b>文件名称</b>: TumblrClientTest.java<br>
- * <b>包　　名</b>: com.anjia.tumblr<br>
- * <b>创建时间</b>: 2016年12月11日 下午10:44:03<br> 
- * <b>修改时间</b>: <br> 
- *
- * @author SN_AnJia(anjia0532@qq.com)
- * @version 1.0
- * @since jdk 1.8
+ * Tests for JumblrClient
+ * @author jc
  */
 public class TumblrClientTest {
 
     TumblrClient client;
-    
+
     @Before
     public void setup() throws IOException {
-        client = mock(TumblrClient.class);
+//        client = new TumblrClient("ck", "cs", "@", "@");
+        client = mock(TumblrClient.class,withSettings().useConstructor("ck", "cs", "@", "@"));
+//        client.initService("ck", "cs");
+//        client.setToken( "@", "@");
+        
         ResponseWrapper rw = new MockResponseWrapper();
         when(client.get(anyString(), anyMap())).thenReturn(rw);
         when(client.post(anyString(), anyMap())).thenReturn(rw);
         when(client.postMultipart(anyString(), anyMap())).thenReturn(rw);
     }
 
+    /**
+     * User methods
+     */
+
     @Test
     public void user() {
-    	client.user();
-        verify(client).get("/user/info", null).getUser();
+        client.user();
+        verify(client).get("/user/info", null);
     }
+
+    @Test
+    public void userDashboard() {
+        client.userDashboard();
+        verify(client).get("/user/dashboard", null);
+
+        Map<String, Object> options = getRandomishOptions();
+        client.userDashboard(options);
+        verify(client).get("/user/dashboard", options);
+    }
+
+    @Test
+    public void userFollowing() {
+        client.userFollowing();
+        verify(client).get("/user/following", null);
+
+        Map<String, Object> options = getRandomishOptions();
+        client.userFollowing(options);
+        verify(client).get("/user/following", options);
+    }
+
+    @Test
+    public void userLikes() {
+        client.userLikes();
+        verify(client).get("/user/likes", null);
+
+        Map<String, Object> options = getRandomishOptions();
+        client.userLikes(options);
+        verify(client).get("/user/likes", options);
+    }
+
+    @Test
+    public void like() {
+        Long id = 42L;
+        String reblogKey = "hello";
+
+        client.like(id, reblogKey);
+        Map<String, String> options = new HashMap<String, String>();
+        options.put("id", id.toString());
+        options.put("reblog_key", reblogKey);
+        verify(client).post("/user/like", options);
+    }
+
+    @Test
+    public void unlike() {
+        Long id = 42L;
+        String reblogKey = "hello";
+
+        client.unlike(id, reblogKey);
+        Map<String, String> options = new HashMap<String, String>();
+        options.put("id", id.toString());
+        options.put("reblog_key", reblogKey);
+        verify(client).post("/user/unlike", options);
+    }
+
+    @Test
+    public void follow() {
+        client.follow("hey.com");
+        Map<String, String> options = new HashMap<String, String>();
+        options.put("url", "hey.com");
+        verify(client).post("/user/follow", options);
+    }
+
+    @Test
+    public void unfollow() {
+        client.unfollow("hey.com");
+        Map<String, String> options = new HashMap<String, String>();
+        options.put("url", "hey.com");
+        verify(client).post("/user/unfollow", options);
+    }
+
+    /**
+     * Blog methods
+     */
+
+    @Test
+    public void userAvatar() {
+        client.blogAvatar("hey.com");
+        verify(client).blogAvatar("/blog/hey.com/avatar");
+
+        client.blogAvatar("hey.com", 64);
+        verify(client).blogAvatar("/blog/hey.com/avatar/64");
+    }
+
+    @Test
+    public void blogInfo() {
+        Map<String, String> map = new HashMap<String, String>();
+        map.put("api_key", "ck");
+
+        client.blogInfo("blog_name");
+        verify(client).get("/blog/blog_name.tumblr.com/info", map);
+
+        client.blogInfo("blog_name.com");
+        verify(client).get("/blog/blog_name.com/info", map);
+    }
+
+    @Test
+    public void blogFollowers() {
+        client.blogFollowers("blog_name");
+        verify(client).get("/blog/blog_name.tumblr.com/followers", null);
+
+        Map<String, Object> options = getRandomishOptions();
+        client.blogFollowers("blog_name", options);
+        verify(client).get("/blog/blog_name.tumblr.com/followers", options);
+    }
+
+    @Test
+    public void blogLikes() {
+        client.blogLikes("hey.com");
+        verify(client).get("/blog/hey.com/likes", getApiKeyOptions());
+
+        Map<String, Object> options = getRandomishOptions();
+        client.blogLikes("hey.com", options);
+        options.putAll(getApiKeyOptions());
+        verify(client).get("/blog/hey.com/likes", options);
+    }
+
+    @Test
+    public void blogPosts() {
+        client.blogPosts("hey.com");
+        verify(client).get("/blog/hey.com/posts", getApiKeyOptions());
+
+        Map<String, Object> options = getRandomishOptions();
+        client.blogPosts("hey.com", options);
+        options.putAll(getApiKeyOptions());
+        verify(client).get("/blog/hey.com/posts", options);
+
+        options = getRandomishOptions();
+        options.put("type", "audio");
+        client.blogPosts("hey.com", options);
+        options.remove("type"); // should not be there on the request
+        options.putAll(getApiKeyOptions());
+        verify(client).get("/blog/hey.com/posts/audio", options);
+    }
+
+    @Test
+    public void blogPost() {
+        Long id = 24L;
+        client.blogPost("hey.com", id);
+        Map<String, Object> options = getApiKeyOptions();
+        options.put("id", id.toString());
+        verify(client).get("/blog/hey.com/posts", options);
+    }
+
+    @Test
+    public void blogQueuedPosts() {
+        client.blogQueuedPosts("hey.com");
+        verify(client).get("/blog/hey.com/posts/queue", null);
+
+        Map<String, Object> options = getRandomishOptions();
+        client.blogQueuedPosts("hey.com", options);
+        verify(client).get("/blog/hey.com/posts/queue", options);
+    }
+
+    @Test
+    public void blogDraftPosts() {
+        client.blogDraftPosts("hey.com");
+        verify(client).get("/blog/hey.com/posts/draft", null);
+
+        Map<String, Object> options = getRandomishOptions();
+        client.blogDraftPosts("hey.com", options);
+        verify(client).get("/blog/hey.com/posts/draft", options);
+    }
+
+    @Test
+    public void blogSubmissions() {
+        client.blogSubmissions("hey.com");
+        verify(client).get("/blog/hey.com/posts/submission", null);
+
+        Map<String, Object> options = getRandomishOptions();
+        client.blogSubmissions("hey.com", options);
+        verify(client).get("/blog/hey.com/posts/submission", options);
+    }
+
+    /**
+     * Post methods
+     */
+
+    @Test
+    public void postDelete() {
+        client.postDelete("hey.com", 42L);
+        Map<String, String> options = new HashMap<String, String>();
+        options.put("id", "42");
+        verify(client).post("/blog/hey.com/post/delete", options);
+    }
+
+    @Test
+    public void postReblog() {
+        client.postReblog("hey.com", 42L, "key");
+        Map<String, Object> options = new HashMap<String, Object>();
+        options.put("id", "42");
+        options.put("reblog_key", "key");
+        verify(client).post("/blog/hey.com/post/reblog", options);
+
+        options = getRandomishOptions();
+        client.postReblog("hey.com", 42L, "key", options);
+        options.put("id", "42");
+        options.put("reblog_key", "key");
+        verify(client).post("/blog/hey.com/post/reblog", options);
+    }
+
+    @Test
+    public void postEdit() throws IOException {
+        Map<String, Object> options = getRandomishOptions();
+        client.postEdit("hey.com", 42L, options);
+        options.put("id", 42L);
+        verify(client).postMultipart("/blog/hey.com/post/edit", options);
+    }
+
+    @Test
+    public void postCreate() throws IOException {
+        Map<String, Object> options = getRandomishOptions();
+        client.postCreate("hey.com", options);
+        verify(client).postMultipart("/blog/hey.com/post", options);
+    }
+
+    /**
+     * Tagged methods
+     */
+
+    @Test
+    public void tagged() {
+        String tag = "coolio";
+
+        client.tagged(tag);
+        Map<String, Object> map = getApiKeyOptions();
+        map.put("tag", tag);
+        verify(client).get("/tagged", map);
+
+        Map<String, Object> options = getRandomishOptions();
+        client.tagged(tag, options);
+        options.putAll(getApiKeyOptions());
+        options.put("tag", tag);
+        verify(client).get("/tagged", options);
+    }
+
+    /**
+     * Other methods
+     */
+
+    @Test
+    public void newPost() throws IllegalAccessException, InstantiationException {
+        QuotePost post = client.newPost("blog", QuotePost.class);
+        assertEquals("blog", post.getBlogName());
+        assertEquals(client, post.getClient());
+    }
+
+    @Test
+    public void setToken() {
+        client.setToken("t1", "t2");
+        verify(client).setToken("t1", "t2");
+    }
+
+
+    /**
+     * Helper methods
+     */
+
+    private Map<String, Object> getApiKeyOptions() {
+        Map<String, Object> map = new HashMap<String, Object>();
+        map.put("api_key", "ck");
+        return map;
+    }
+
+    private Map<String, Object> getRandomishOptions() {
+        Map<String, Object> map = new HashMap<String, Object>();
+        map.put("hello", "world");
+        return map;
+    }
+
 }

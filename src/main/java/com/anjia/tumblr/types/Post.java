@@ -9,6 +9,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.TimeZone;
+
 import org.apache.commons.lang3.StringUtils;
 
 /**
@@ -41,6 +42,14 @@ public class Post extends Resource {
         public String getValue() {
             return this.mType;
         }
+        public static PostType value(String type) {
+			for (PostType val : values()) {
+				if (val.mType.equals(type)) {
+					return val;
+				}
+			}
+			return PostType.UNKNOWN;
+		}
     }
 
     private String blog_name;
@@ -192,7 +201,7 @@ public class Post extends Resource {
      * @return type as String
      */
     public PostType getType() {
-        return PostType.UNKNOWN;
+        return this.type;
     }
 
     /**
@@ -392,8 +401,187 @@ public class Post extends Resource {
     public void setTags(List<String> tags) {
         this.tags = tags;
     }
+    public void setType(String type) {
+        this.type=PostType.value(type);
+    }
 
-    /**
+    public String getBlog_name() {
+		return blog_name;
+	}
+
+	public void setBlog_name(String blog_name) {
+		this.blog_name = blog_name;
+	}
+
+	public String getPost_url() {
+		return post_url;
+	}
+
+	public void setPost_url(String post_url) {
+		this.post_url = post_url;
+	}
+
+	public String getReblog_key() {
+		return reblog_key;
+	}
+
+	public void setReblog_key(String reblog_key) {
+		this.reblog_key = reblog_key;
+	}
+
+	public Boolean getBookmarklet() {
+		return bookmarklet;
+	}
+
+	public void setBookmarklet(Boolean bookmarklet) {
+		this.bookmarklet = bookmarklet;
+	}
+
+	public Boolean getMobile() {
+		return mobile;
+	}
+
+	public void setMobile(Boolean mobile) {
+		this.mobile = mobile;
+	}
+
+	public String getShort_url() {
+		return short_url;
+	}
+
+	public void setShort_url(String short_url) {
+		this.short_url = short_url;
+	}
+
+	public String getSource_url() {
+		return source_url;
+	}
+
+	public void setSource_url(String source_url) {
+		this.source_url = source_url;
+	}
+
+	public String getSource_title() {
+		return source_title;
+	}
+
+	public void setSource_title(String source_title) {
+		this.source_title = source_title;
+	}
+
+	public Boolean getLiked() {
+		return liked;
+	}
+
+	public void setLiked(Boolean liked) {
+		this.liked = liked;
+	}
+
+	public String getAuthor() {
+		return author;
+	}
+
+	public void setAuthor(String author) {
+		this.author = author;
+	}
+
+	public Long getLiked_timestamp() {
+		return liked_timestamp;
+	}
+
+	public void setLiked_timestamp(Long liked_timestamp) {
+		this.liked_timestamp = liked_timestamp;
+	}
+
+	public Long getReblogged_from_id() {
+		return reblogged_from_id;
+	}
+
+	public void setReblogged_from_id(Long reblogged_from_id) {
+		this.reblogged_from_id = reblogged_from_id;
+	}
+
+	public Long getReblogged_root_id() {
+		return reblogged_root_id;
+	}
+
+	public void setReblogged_root_id(Long reblogged_root_id) {
+		this.reblogged_root_id = reblogged_root_id;
+	}
+
+	public String getReblogged_from_url() {
+		return reblogged_from_url;
+	}
+
+	public void setReblogged_from_url(String reblogged_from_url) {
+		this.reblogged_from_url = reblogged_from_url;
+	}
+
+	public String getReblogged_from_name() {
+		return reblogged_from_name;
+	}
+
+	public void setReblogged_from_name(String reblogged_from_name) {
+		this.reblogged_from_name = reblogged_from_name;
+	}
+
+	public String getReblogged_from_title() {
+		return reblogged_from_title;
+	}
+
+	public void setReblogged_from_title(String reblogged_from_title) {
+		this.reblogged_from_title = reblogged_from_title;
+	}
+
+	public String getReblogged_root_url() {
+		return reblogged_root_url;
+	}
+
+	public void setReblogged_root_url(String reblogged_root_url) {
+		this.reblogged_root_url = reblogged_root_url;
+	}
+
+	public String getReblogged_root_name() {
+		return reblogged_root_name;
+	}
+
+	public void setReblogged_root_name(String reblogged_root_name) {
+		this.reblogged_root_name = reblogged_root_name;
+	}
+
+	public String getReblogged_root_title() {
+		return reblogged_root_title;
+	}
+
+	public void setReblogged_root_title(String reblogged_root_title) {
+		this.reblogged_root_title = reblogged_root_title;
+	}
+
+	public Long getNote_count() {
+		return note_count;
+	}
+
+	public void setNote_count(Long note_count) {
+		this.note_count = note_count;
+	}
+
+	public String getDate() {
+		return date;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	public void setTimestamp(Long timestamp) {
+		this.timestamp = timestamp;
+	}
+
+	public void setNotes(List<Note> notes) {
+		this.notes = notes;
+	}
+
+	/**
      * Add a tag
      */
     public void addTag(String tag) {

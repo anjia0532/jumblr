@@ -25,4 +25,16 @@ public class Video {
         return embed_code;
     }
 
+	public String getEmbed_code() {
+		return embed_code;
+	}
+
+	public void setEmbed_code(String embed_code) {
+		this.embed_code = embed_code;
+	}
+
+	public void setWidth(Integer width) {
+		this.width = width;
+	}
+
 }

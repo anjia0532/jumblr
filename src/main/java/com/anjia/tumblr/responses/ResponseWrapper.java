@@ -62,28 +62,28 @@ public class ResponseWrapper {
 
     // NOTE: needs to be duplicated logic due to Java erasure of generic types
     public List<Post> getPosts() {
-        List<Post> l =JSON.parseObject(response.getJSONArray("posts").toJSONString(),new TypeReference<List<Post>>(){}.getType());
+        List<Post> l =response.getJSONArray("posts").toJavaObject(new TypeReference<List<Post>>(){}.getType());
         for (Post e : l) { e.setClient(client); }
         return l;
     }
 
     // NOTE: needs to be duplicated logic due to Java erasure of generic types
     public List<User> getUsers() {
-    	List<User> l =JSON.parseObject(response.getJSONArray("users").toJSONString(),new TypeReference<List<User>>(){}.getType());
+    	List<User> l =response.getJSONArray("users").toJavaObject(new TypeReference<List<User>>(){}.getType());
         for (User e : l) { e.setClient(client); }
         return l;
     }
 
     // NOTE: needs to be duplicated logic due to Java erasure of generic types
     public List<Post> getLikedPosts() {
-    	List<Post> l =JSON.parseObject(response.getJSONArray("liked_posts").toJSONString(),new TypeReference<List<Post>>(){}.getType());
+    	List<Post> l =response.getJSONArray("liked_posts").toJavaObject( new TypeReference<List<Post>>(){}.getType());
         for (Post e : l) { e.setClient(client); }
         return l;
     }
 
     // NOTE: needs to be duplicated logic due to Java erasure of generic types
     public List<Post> getTaggedPosts() {
-    	List<Post> l =JSON.parseObject(response.toJSONString(),new TypeReference<List<Post>>(){}.getType());
+    	List<Post> l =response.toJavaObject(new TypeReference<List<Post>>(){}.getType());
     	
         for (Post e : l) { e.setClient(client); }
         return l;
@@ -91,7 +91,7 @@ public class ResponseWrapper {
 
     // NOTE: needs to be duplicated logic due to Java erasure of generic types
     public List<Blog> getBlogs() {
-    	 List<Blog> l =JSON.parseObject(response.getJSONArray("blogs").toJSONString(),new TypeReference<List<Blog>>(){}.getType());
+    	 List<Blog> l =response.getJSONArray("blogs").toJavaObject(new TypeReference<List<Blog>>(){}.getType());
         for (Blog e : l) { e.setClient(client); }
         return l;
     }
@@ -102,16 +102,18 @@ public class ResponseWrapper {
         return e;
     }
     
-	@SuppressWarnings("unchecked")
 	private <T extends Post> TypeBlog<T> getBlogByType(Class<T> k) {
-        TypeBlog<T> blog  = JSON.parseObject(response.get("blog").toString(),TypeBlog.class);
+        @SuppressWarnings("unchecked")
+		TypeBlog<T> blog  = response.getJSONObject("blog").toJavaObject(TypeBlog.class);
         blog.setTypePostCount(response.getIntValue("total_posts"));
         
-        List<T>  posts=JSON.parseObject(response.get("posts").toString(), new TypeReference<List<Post>>(){}.getType());
+        List<T>  posts=response.getJSONArray("posts").toJavaObject( new TypeReference<List<Post>>(){}.getType());
         
         for (T post : posts) {post.setClient(client);}
         blog.setBlogPosts(posts);
         blog.setClient(client);
+        blog.setTypePostCount(response.getIntValue("total_posts"));
+        blog.setPostCount(response.getJSONObject("blog").getIntValue("total_posts"));
         return blog;
     }
 }

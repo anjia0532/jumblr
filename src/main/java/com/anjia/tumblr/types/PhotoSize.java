@@ -33,4 +33,16 @@ public class PhotoSize {
         return height;
     }
 
+	public void setWidth(int width) {
+		this.width = width;
+	}
+
+	public void setHeight(int height) {
+		this.height = height;
+	}
+
+	public void setUrl(String url) {
+		this.url = url;
+	}
+
 }

@@ -34,4 +34,16 @@ public class Dialogue {
         return phrase;
     }
 
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public void setLabel(String label) {
+		this.label = label;
+	}
+
+	public void setPhrase(String phrase) {
+		this.phrase = phrase;
+	}
+
 }

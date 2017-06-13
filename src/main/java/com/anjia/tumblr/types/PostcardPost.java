@@ -60,7 +60,23 @@ public class PostcardPost extends SafePost {
         this.body = body;
     }
 
-    @Override
+    public String getAsking_name() {
+		return asking_name;
+	}
+
+	public void setAsking_name(String asking_name) {
+		this.asking_name = asking_name;
+	}
+
+	public String getAsking_url() {
+		return asking_url;
+	}
+
+	public void setAsking_url(String asking_url) {
+		this.asking_url = asking_url;
+	}
+
+	@Override
     public PostType getType() {
         return PostType.POSTCARD;
     }

@@ -43,7 +43,7 @@ public class User extends Resource {
      * @return The following count
      */
     public Integer getFollowingCount() {
-        return following instanceof Boolean ? null : ((Double) following).intValue();
+        return following instanceof Boolean ? null : ((Integer) following).intValue();
     }
 
     /**
@@ -66,5 +66,37 @@ public class User extends Resource {
         }
         return this.blogs;
     }
+
+	public Object getFollowing() {
+		return following;
+	}
+
+	public void setFollowing(Object following) {
+		this.following = following;
+	}
+
+	public Integer getLikes() {
+		return likes;
+	}
+
+	public void setLikes(Integer likes) {
+		this.likes = likes;
+	}
+
+	public String getDefault_post_format() {
+		return default_post_format;
+	}
+
+	public void setDefault_post_format(String default_post_format) {
+		this.default_post_format = default_post_format;
+	}
+
+	public void setBlogs(List<Blog> blogs) {
+		this.blogs = blogs;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
 
 }

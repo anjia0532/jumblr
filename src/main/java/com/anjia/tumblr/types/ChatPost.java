@@ -58,7 +58,11 @@ public class ChatPost extends SafePost {
         return PostType.CHAT;
     }
 
-    /**
+    public void setDialogue(List<Dialogue> dialogue) {
+		this.dialogue = dialogue;
+	}
+
+	/**
      * Get the details for this post (and the base details)
      * @return the detail
      */

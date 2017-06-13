@@ -3,7 +3,6 @@ package com.anjia.tumblr;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.HttpURLConnection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -15,10 +14,10 @@ import com.alibaba.fastjson.JSON;
 import com.anjia.tumblr.exceptions.TumblrException;
 import com.anjia.tumblr.responses.ResponseWrapper;
 import com.anjia.tumblr.types.Blog;
+import com.anjia.tumblr.types.PhotoPost;
 import com.anjia.tumblr.types.Post;
 import com.anjia.tumblr.types.TypeBlog;
 import com.anjia.tumblr.types.User;
-import com.anjia.tumblr.types.VideoPost;
 import com.anjia.tumblr.utils.MultipartConverter;
 import com.github.scribejava.apis.TumblrApi;
 import com.github.scribejava.core.builder.ServiceBuilder;
@@ -126,6 +125,9 @@ public class TumblrClient {
         String pathExt = size == null ? "" : "/" + size.toString();
         return "https://api.tumblr.com/v2"+blogPath(blogName, "/avatar" + pathExt);
     }
+    public String blogAvatar(String blogName) {
+        return blogAvatar(blogName,null);
+    }
 
     /**
      * 获取指定博客公开的喜欢的posts
@@ -141,7 +143,9 @@ public class TumblrClient {
         options.put("api_key", this.apiKey);
         return get(blogPath(blogName, "/likes"), options).getLikedPosts();
     }
-    
+    public List<Post> blogLikes(String blogName) {
+        return blogLikes(blogName,null);
+    }
 	/**
      * 博客Uri
      * @param blogName 博主名(博主id e.g. shaonian 或者博客首页 shaonian.tumblr.com) 
@@ -454,14 +458,33 @@ public class TumblrClient {
     }
 
     public ResponseWrapper get(String path, Map<String, ?> map) {
-    	return clear(this.constructGet(path, map).send());
+    	return clear(this.constructGet(path, map));
     }
+    
     public ResponseWrapper post(String path, Map<String, ?> map) {
-    	return clear(this.constructPost(path, map).send());
+    	return clear(this.constructPost(path, map));
+    }
+    /**
+     * Tagged posts
+     * @param tag the tag to search
+     * @param options the options for the call (or null)
+     * @return a list of posts
+     */
+    public List<Post> tagged(String tag, Map<String, Object> options) {
+        if (options == null) {
+            options = Collections.emptyMap();
+        }
+        options.put("api_key", apiKey);
+        options.put("tag", tag);
+        return get("/tagged", options).getTaggedPosts();
     }
 
-	ResponseWrapper clear(Response response) {
+    public List<Post> tagged(String tag) {
+        return this.tagged(tag, null);
+    }
+	ResponseWrapper clear(OAuthRequest request) {
 		try {
+			Response response = service.execute(request);
 			if (StringUtils.startsWith(String.valueOf(response.getCode()),"2")) {
 				String json = response.getBody();
 				ResponseWrapper wrapper = JSON.parseObject(json, ResponseWrapper.class);
@@ -472,20 +495,21 @@ public class TumblrClient {
 				return wrapper;
 			}
 		} catch (Exception e) {
-			throw new TumblrException(response);
+			e.printStackTrace();
 		}
-		throw new TumblrException(response);
+		throw new TumblrException(null);
 	}
 	
 	public ResponseWrapper postMultipart(String path, Map<String, Object> bodyMap) throws IOException {
-        OAuthRequest request = this.constructPost(path, bodyMap);
+		OAuthRequest request = this.constructPost(path, bodyMap);
         OAuthRequest newRequest = new MultipartConverter(request, bodyMap).getRequest(service);
-        return clear(newRequest.send());
+        return clear(newRequest);
     }
 	
     public OAuthRequest constructGet(String path, Map<String, ?> queryParams) {
         String url = "https://api.tumblr.com/v2" + path;
-        OAuthRequest request = new OAuthRequest(Verb.GET, url,service);
+//        OAuthRequest request = new OAuthRequest(Verb.GET, url,service);
+        OAuthRequest request = new OAuthRequest(Verb.GET, url);
         service.signRequest(token, request);
         if (queryParams != null) {
             for (Map.Entry<String, ?> entry : queryParams.entrySet()) {
@@ -498,7 +522,8 @@ public class TumblrClient {
     }
     private OAuthRequest constructPost(String path, Map<String, ?> bodyMap) {
     	String url = "https://api.tumblr.com/v2" +  path;
-        OAuthRequest request = new OAuthRequest(Verb.POST, url,service);
+        OAuthRequest request = new OAuthRequest(Verb.POST, url);
+//        OAuthRequest request = new OAuthRequest(Verb.POST, url,service);
         service.signRequest(token, request);
         for (Map.Entry<String, ?> entry : bodyMap.entrySet()) {
         	String key = entry.getKey();
@@ -507,7 +532,8 @@ public class TumblrClient {
             request.addBodyParameter(key,value.toString());
         }
         request.addHeader("User-Agent", "tumblr v2");
-        return request;
+
+      return request;
     }
     public static void main(String[] args) throws IOException {
 
@@ -516,7 +542,8 @@ public class TumblrClient {
 		System.setProperty("proxyPort", "1080");
 		
 		TumblrClient tumblrClient=new TumblrClient("vCuTytzVQQ0scyP2A2X4Ig16rL4V7zzwPopROAUBBZTKXaQnHA", "xULUgkn92PHqK9Bw2nund9ItMnLyGGOtLLAxrJHA9qDbMHm4FR", "2u0ejTxzYbU7yI2K1aCM73uxYaEyAzb2gufbKtE2ffeFhpBjW2", "q6V8ooUBLEhDKzuTYSCXg0r9HcAyoYw5mwbNg9ZwKiZnadjnvb");
-		System.err.println(tumblrClient.typeBlogInfo("shaoniannule", null, VideoPost.class).getPostCount());;
+//		System.err.println(JSON.toJSONString(tumblrClient.blogPosts("shaoniannule")));;
+		System.err.println(tumblrClient.typeBlogInfo("shaoniannule", null, PhotoPost.class).getTypePostCount());;
 		//https://api.tumblr.com/v2/blog/john.io/posts/video?api_key={key}
 //		System.err.println(tumblrClient.blogAvatar("shaoniannule",64));
 	}

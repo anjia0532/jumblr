@@ -65,7 +65,15 @@ public class LinkPost extends SafePost {
         return PostType.LINK;
     }
 
-    /**
+    public String getUrl() {
+		return url;
+	}
+
+	public void setUrl(String url) {
+		this.url = url;
+	}
+
+	/**
      * Get the detail for this post (and the base detail)
      * @return the details
      */

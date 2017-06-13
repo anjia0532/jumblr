@@ -86,7 +86,39 @@ public class PhotoPost extends Post {
         this.postType = type;
     }
 
-    /**
+    public String getLink() {
+		return link;
+	}
+
+	public void setLink(String link) {
+		this.link = link;
+	}
+
+	public List<Photo> getPendingPhotos() {
+		return pendingPhotos;
+	}
+
+	public void setPendingPhotos(List<Photo> pendingPhotos) {
+		this.pendingPhotos = pendingPhotos;
+	}
+
+	public PhotoType getPostType() {
+		return postType;
+	}
+
+	public void setWidth(Integer width) {
+		this.width = width;
+	}
+
+	public void setHeight(Integer height) {
+		this.height = height;
+	}
+
+	public void setPhotos(List<Photo> photos) {
+		this.photos = photos;
+	}
+
+	/**
      * Set the source for this post
      * @param source the source to set
      * @throws IllegalArgumentException data is already set
@@ -95,7 +127,11 @@ public class PhotoPost extends Post {
         setPhoto(new Photo(source));
     }
 
-    /**
+    public void setPostType(String postType) {
+		this.postType = PhotoType.value(postType);
+	}
+
+	/**
      * Set the data for this post (single photo)
      * @param file the file to read from
      * @throws IllegalArgumentException source is already set

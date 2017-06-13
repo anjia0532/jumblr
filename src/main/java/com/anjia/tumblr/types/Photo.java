@@ -24,6 +24,15 @@ public class Photo {
         public String getPrefix() {
             return this.prefix;
         }
+        
+        public static PhotoType value(String prefix) {
+			for (PhotoType val : values()) {
+				if (val.prefix.equals(prefix)) {
+					return val;
+				}
+			}
+			return SOURCE;
+		}
     };
 
     private String caption;
@@ -32,7 +41,8 @@ public class Photo {
 
     private String source;
     private File file;
-
+    
+    public Photo() {}
     /**
      * Create a new photo with a data
      * @param file the file for the photo
@@ -96,5 +106,41 @@ public class Photo {
             return null;
         }
     }
+
+	public List<PhotoSize> getAlt_sizes() {
+		return alt_sizes;
+	}
+
+	public void setAlt_sizes(List<PhotoSize> alt_sizes) {
+		this.alt_sizes = alt_sizes;
+	}
+
+	public PhotoSize getOriginal_size() {
+		return original_size;
+	}
+
+	public void setOriginal_size(PhotoSize original_size) {
+		this.original_size = original_size;
+	}
+
+	public String getSource() {
+		return source;
+	}
+
+	public void setSource(String source) {
+		this.source = source;
+	}
+
+	public File getFile() {
+		return file;
+	}
+
+	public void setFile(File file) {
+		this.file = file;
+	}
+
+	public void setCaption(String caption) {
+		this.caption = caption;
+	}
 
 }

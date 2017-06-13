@@ -44,11 +44,13 @@ public class MultipartConverter {
     }
 
     public OAuthRequest getRequest(OAuthService<OAuth1AccessToken> service) {
-        OAuthRequest request = new OAuthRequest(originalRequest.getVerb(), originalRequest.getUrl(), service);
+//        OAuthRequest request = new OAuthRequest(originalRequest.getVerb(), originalRequest.getUrl(), service);
+        OAuthRequest request = new OAuthRequest(originalRequest.getVerb(), originalRequest.getUrl());
         request.addHeader("Authorization", originalRequest.getHeaders().get("Authorization"));
         request.addHeader("Content-Type", "multipart/form-data, boundary=" + boundary);
         request.addHeader("Content-length", bodyLength.toString());
-        request.addPayload(complexPayload());
+//        request.addPayload(complexPayload());
+        request.setPayload(complexPayload());
         return request;
     }
 

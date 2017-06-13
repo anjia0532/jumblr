@@ -197,7 +197,59 @@ public class Blog extends Resource {
         return this.submissions(null);
     }
 
-    /**
+    public int getPosts() {
+		return posts;
+	}
+
+	public void setPosts(int posts) {
+		this.posts = posts;
+	}
+
+	public int getLikes() {
+		return likes;
+	}
+
+	public void setLikes(int likes) {
+		this.likes = likes;
+	}
+
+	public int getFollowers() {
+		return followers;
+	}
+
+	public void setFollowers(int followers) {
+		this.followers = followers;
+	}
+
+	public boolean isAsk() {
+		return ask;
+	}
+
+	public void setAsk(boolean ask) {
+		this.ask = ask;
+	}
+
+	public boolean isAsk_anon() {
+		return ask_anon;
+	}
+
+	public void setAsk_anon(boolean ask_anon) {
+		this.ask_anon = ask_anon;
+	}
+
+	public void setTitle(String title) {
+		this.title = title;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
+	public void setUpdated(Long updated) {
+		this.updated = updated;
+	}
+
+	/**
      * Create a new post of a given type for this blog
      * @param klass the class of the post to make
      * @return new post

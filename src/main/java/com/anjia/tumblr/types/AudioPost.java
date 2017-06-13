@@ -134,7 +134,87 @@ public class AudioPost extends Post {
         return PostType.AUDIO;
     }
 
-    /**
+    public String getPlayer() {
+		return player;
+	}
+
+	public void setPlayer(String player) {
+		this.player = player;
+	}
+
+	public String getAudio_url() {
+		return audio_url;
+	}
+
+	public void setAudio_url(String audio_url) {
+		this.audio_url = audio_url;
+	}
+
+	public Integer getPlays() {
+		return plays;
+	}
+
+	public void setPlays(Integer plays) {
+		this.plays = plays;
+	}
+
+	public String getAlbum_art() {
+		return album_art;
+	}
+
+	public void setAlbum_art(String album_art) {
+		this.album_art = album_art;
+	}
+
+	public String getArtist() {
+		return artist;
+	}
+
+	public void setArtist(String artist) {
+		this.artist = artist;
+	}
+
+	public String getAlbum() {
+		return album;
+	}
+
+	public void setAlbum(String album) {
+		this.album = album;
+	}
+
+	public String getTrack_name() {
+		return track_name;
+	}
+
+	public void setTrack_name(String track_name) {
+		this.track_name = track_name;
+	}
+
+	public Integer getTrack_number() {
+		return track_number;
+	}
+
+	public void setTrack_number(Integer track_number) {
+		this.track_number = track_number;
+	}
+
+	public String getExternal_url() {
+		return external_url;
+	}
+
+	public void setExternal_url(String external_url) {
+		this.external_url = external_url;
+	}
+
+	public File getData() {
+		return data;
+	}
+
+	public void setYear(Integer year) {
+		this.year = year;
+	}
+
+	/**
      * Get the details about this post (along with base details)
      * @return the detail
      */

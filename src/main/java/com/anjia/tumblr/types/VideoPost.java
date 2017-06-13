@@ -107,7 +107,67 @@ public class VideoPost extends Post {
         return PostType.VIDEO;
     }
 
-    /**
+    public List<Video> getPlayer() {
+		return player;
+	}
+
+	public void setPlayer(List<Video> player) {
+		this.player = player;
+	}
+
+	public String getEmbed() {
+		return embed;
+	}
+
+	public void setEmbed(String embed) {
+		this.embed = embed;
+	}
+
+	public String getPermalink_url() {
+		return permalink_url;
+	}
+
+	public void setPermalink_url(String permalink_url) {
+		this.permalink_url = permalink_url;
+	}
+
+	public String getThumbnail_url() {
+		return thumbnail_url;
+	}
+
+	public void setThumbnail_url(String thumbnail_url) {
+		this.thumbnail_url = thumbnail_url;
+	}
+
+	public String getVideo_url() {
+		return video_url;
+	}
+
+	public void setVideo_url(String video_url) {
+		this.video_url = video_url;
+	}
+
+	public int getThumbnail_width() {
+		return thumbnail_width;
+	}
+
+	public void setThumbnail_width(int thumbnail_width) {
+		this.thumbnail_width = thumbnail_width;
+	}
+
+	public int getThumbnail_height() {
+		return thumbnail_height;
+	}
+
+	public void setThumbnail_height(int thumbnail_height) {
+		this.thumbnail_height = thumbnail_height;
+	}
+
+	public File getData() {
+		return data;
+	}
+
+	/**
      * Get the details for this post (in addition to the base details)
      * @return details of this post
      */
